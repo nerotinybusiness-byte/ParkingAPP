@@ -29,12 +29,12 @@ export interface Spot {
 }
 
 export const SPOTS: Spot[] = [
-  { id: 1, name: "Holešovice — Private Garage",  basePrice: 28, type: "Garage",     available: true,  owner: "Jan N.",           x: 138, y: 72  },
-  { id: 2, name: "Nusle — Courtyard Spot",       basePrice: 35, type: "Yard",       available: true,  owner: "Marie K.",         x: 178, y: 152 },
-  { id: 3, name: "O2 Arena — Commercial",        basePrice: 30, type: "Commercial", available: true,  owner: "ArenaPark s.r.o.", x: 270, y: 68  },
-  { id: 4, name: "Vinohrady — Hotel Garage",     basePrice: 45, type: "Hotel",      available: false, owner: "Hotel Omega",      x: 218, y: 118 },
-  { id: 5, name: "Žižkov — Corporate Lot",       basePrice: 22, type: "Corporate",  available: true,  owner: "Techpark CZ",      x: 248, y: 98  },
-  { id: 6, name: "Smíchov — Residential",        basePrice: 32, type: "Garage",     available: true,  owner: "HOA Smíchov 12",   x: 112, y: 138 },
+  { id: 1, name: "Holešovice — Private Garage",  basePrice: 2, type: "Garage",     available: true,  owner: "Jan N.",           x: 138, y: 72  },
+  { id: 2, name: "Nusle — Courtyard Spot",       basePrice: 3, type: "Yard",       available: true,  owner: "Marie K.",         x: 178, y: 152 },
+  { id: 3, name: "O2 Arena — Commercial",        basePrice: 2, type: "Commercial", available: true,  owner: "ArenaPark s.r.o.", x: 270, y: 68  },
+  { id: 4, name: "Vinohrady — Hotel Garage",     basePrice: 4, type: "Hotel",      available: false, owner: "Hotel Omega",      x: 218, y: 118 },
+  { id: 5, name: "Žižkov — Corporate Lot",       basePrice: 2, type: "Corporate",  available: true,  owner: "Techpark CZ",      x: 248, y: 98  },
+  { id: 6, name: "Smíchov — Residential",        basePrice: 3, type: "Garage",     available: true,  owner: "HOA Smíchov 12",   x: 112, y: 138 },
 ];
 
 export const EVENTS = [

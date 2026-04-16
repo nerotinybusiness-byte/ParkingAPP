@@ -15,7 +15,7 @@ export default function DriverView() {
   const [gate, setGate] = useState<GateState>('idle');
 
   const mult = EVENTS[eventIdx].mult;
-  const o2Price = Math.round(30 * mult);
+  const o2Price = Math.round(2 * mult);
 
   const handleGate = useCallback(() => {
     if (gate !== 'idle') return;
@@ -58,7 +58,7 @@ export default function DriverView() {
             }}
           >
             <span style={{ fontSize: 28, fontWeight: 800, color: C.text }}>
-              {o2Price} CZK
+              {o2Price} €
             </span>
             <span style={{ fontSize: 13, color: C.textMid }}>/ hour at O2 Arena</span>
             {mult > 1.5 && (
@@ -123,7 +123,7 @@ export default function DriverView() {
                 >
                   <div style={{ fontSize: 11, color: C.textSoft, marginBottom: 2 }}>Price now</div>
                   <div style={{ fontSize: 18, fontWeight: 700, color: C.text }}>
-                    {Math.round(active.basePrice * mult)} CZK
+                    {Math.round(active.basePrice * mult)} €
                   </div>
                 </div>
                 <div

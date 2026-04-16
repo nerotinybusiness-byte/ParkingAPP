@@ -9,28 +9,28 @@ import StatRow from '@/components/ui/StatRow';
 const SPOT_TYPES = ['Garage', 'Yard', 'Hotel', 'Corporate'];
 
 function getAiText(price: number): string {
-  if (price < 2500) return 'Your price is very competitive. Expect high occupancy but lower margins. Good for building initial reviews.';
-  if (price < 3500) return 'Sweet spot for most Prague neighborhoods. Balanced occupancy and solid returns.';
-  if (price < 5000) return 'Premium pricing — works well in high-demand areas like Vinohrady and Holešovice. May see lower occupancy.';
+  if (price < 100) return 'Your price is very competitive. Expect high occupancy but lower margins. Good for building initial reviews.';
+  if (price < 140) return 'Sweet spot for most Prague neighborhoods. Balanced occupancy and solid returns.';
+  if (price < 200) return 'Premium pricing — works well in high-demand areas like Vinohrady and Holešovice. May see lower occupancy.';
   return 'Top-tier pricing. Best suited for commercial-grade spots near event venues. Occupancy may drop below 40%.';
 }
 
 function getBookingProb(price: number): number {
-  if (price < 2500) return 92;
-  if (price < 3500) return 78;
-  if (price < 5000) return 55;
+  if (price < 100) return 92;
+  if (price < 140) return 78;
+  if (price < 200) return 55;
   return 30;
 }
 
 export default function OwnerView() {
   const [wizard, setWizard] = useState<number | null>(null);
   const [wizType, setWizType] = useState('Garage');
-  const [price, setPrice] = useState(3200);
+  const [price, setPrice] = useState(130);
   const [tab, setTab] = useState<'audit' | 'legal'>('audit');
 
   // Dashboard
   if (wizard === null) {
-    const occupancy = price < 3500 ? 72 : price < 5000 ? 55 : 35;
+    const occupancy = price < 140 ? 72 : price < 200 ? 55 : 35;
     const gross = price * (occupancy / 100);
     const fee = gross * 0.15;
     const net = gross - fee;
@@ -42,13 +42,13 @@ export default function OwnerView() {
           <Card title="AI pricing advisor">
             <div style={{ fontSize: 13, color: C.textMid, marginBottom: 6 }}>Monthly asking price</div>
             <div style={{ fontSize: 28, fontWeight: 800, color: C.text, marginBottom: 8 }}>
-              {price.toLocaleString('cs-CZ')} CZK
+              {price.toLocaleString('cs-CZ')} €
             </div>
             <input
               type="range"
-              min={1500}
-              max={6000}
-              step={100}
+              min={60}
+              max={240}
+              step={5}
               value={price}
               onChange={(e) => setPrice(Number(e.target.value))}
               style={{ width: '100%', marginBottom: 12 }}
@@ -93,10 +93,10 @@ export default function OwnerView() {
           </button>
 
           <Card title="Estimated monthly earnings">
-            <StatRow label="Asking price" value={`${price.toLocaleString('cs-CZ')} CZK`} />
-            <StatRow label={`At ${occupancy}% occupancy`} value={`${Math.round(gross).toLocaleString('cs-CZ')} CZK`} />
-            <StatRow label="Platform fee (15%)" value={`-${Math.round(fee).toLocaleString('cs-CZ')} CZK`} color={C.red} />
-            <StatRow label="Net income" value={`${Math.round(net).toLocaleString('cs-CZ')} CZK`} color={C.green} />
+            <StatRow label="Asking price" value={`${price.toLocaleString('cs-CZ')} €`} />
+            <StatRow label={`At ${occupancy}% occupancy`} value={`${Math.round(gross).toLocaleString('cs-CZ')} €`} />
+            <StatRow label="Platform fee (15%)" value={`-${Math.round(fee).toLocaleString('cs-CZ')} €`} color={C.red} />
+            <StatRow label="Net income" value={`${Math.round(net).toLocaleString('cs-CZ')} €`} color={C.green} />
           </Card>
         </div>
 
@@ -188,7 +188,7 @@ export default function OwnerView() {
                   </div>
                   <p style={{ fontSize: 13, color: C.textMid, lineHeight: 1.5 }}>
                     Income from renting a parking spot long-term is taxed as rental income.
-                    Annual earnings under 30,000 CZK may be exempt.
+                    Annual earnings under 1,200 € may be exempt.
                   </p>
                 </div>
                 <div>
@@ -212,7 +212,7 @@ export default function OwnerView() {
                   </div>
                   <p style={{ fontSize: 13, color: C.textMid, lineHeight: 1.5 }}>
                     We recommend liability insurance covering damage to vehicles parked on your
-                    property. ParkShare offers a bundled policy starting at 89 CZK/month.
+                    property. ParkShare offers a bundled policy starting at 3.50 €/month.
                   </p>
                 </div>
               </div>
@@ -310,13 +310,13 @@ export default function OwnerView() {
             Set your price
           </h4>
           <div style={{ fontSize: 28, fontWeight: 800, color: C.text, marginBottom: 8 }}>
-            {price.toLocaleString('cs-CZ')} CZK / month
+            {price.toLocaleString('cs-CZ')} € / month
           </div>
           <input
             type="range"
-            min={1500}
-            max={6000}
-            step={100}
+            min={60}
+            max={240}
+            step={5}
             value={price}
             onChange={(e) => setPrice(Number(e.target.value))}
             style={{ width: '100%', marginBottom: 12 }}
@@ -379,10 +379,10 @@ export default function OwnerView() {
             Summary
           </h4>
           <StatRow label="Type" value={wizType} />
-          <StatRow label="Monthly price" value={`${price.toLocaleString('cs-CZ')} CZK`} />
+          <StatRow label="Monthly price" value={`${price.toLocaleString('cs-CZ')} €`} />
           <StatRow label="Platform fee" value="15%" />
           <StatRow label="Est. occupancy" value={`${getBookingProb(price)}%`} />
-          <StatRow label="Net monthly" value={`${Math.round(price * (getBookingProb(price) / 100) * 0.85).toLocaleString('cs-CZ')} CZK`} color={C.green} />
+          <StatRow label="Net monthly" value={`${Math.round(price * (getBookingProb(price) / 100) * 0.85).toLocaleString('cs-CZ')} €`} color={C.green} />
           <StatRow label="Payout" value="Monthly bank transfer" />
           <div style={{ marginTop: 16, display: 'flex', gap: 10 }}>
             <button

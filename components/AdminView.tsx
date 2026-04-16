@@ -8,17 +8,17 @@ const KPI = [
   { label: 'Gross margin', value: '91.4%', color: C.green },
   { label: 'Active spots', value: '1 842', color: C.text },
   { label: 'Bookings today', value: '3 718', color: C.text },
-  { label: 'Avg host CAC', value: '1 240 CZK', color: C.yellow },
+  { label: 'Avg host CAC', value: '50 €', color: C.yellow },
   { label: 'Cruising cut', value: '~12%', color: C.green },
   { label: 'Revenue MoM', value: '+23%', color: C.green },
 ];
 
 const UNIT_ROWS = [
-  { label: 'Avg booking revenue', value: 68, max: 100, color: C.green, display: '68 CZK' },
-  { label: 'Host payout', value: 58, max: 100, color: C.red, display: '-58 CZK' },
-  { label: 'Payment processing', value: 3, max: 100, color: C.red, display: '-3 CZK' },
-  { label: 'Support cost', value: 1.2, max: 100, color: C.red, display: '-1.2 CZK' },
-  { label: 'Contribution margin', value: 5.8, max: 10, color: C.green, display: '5.8 CZK' },
+  { label: 'Avg booking revenue', value: 68, max: 100, color: C.green, display: '2.70 €' },
+  { label: 'Host payout', value: 58, max: 100, color: C.red, display: '-2.30 €' },
+  { label: 'Payment processing', value: 3, max: 100, color: C.red, display: '-0.12 €' },
+  { label: 'Support cost', value: 1.2, max: 100, color: C.red, display: '-0.05 €' },
+  { label: 'Contribution margin', value: 5.8, max: 10, color: C.green, display: '0.23 €' },
 ];
 
 function clamp(v: number, min: number, max: number) {

@@ -100,7 +100,7 @@ export default function PragueMap({ spots, mult, active, onSelect }: PragueMapPr
                   fill={C.surface}
                   fontFamily="Figtree, sans-serif"
                 >
-                  {price} CZK
+                  {price} €
                 </text>
               </>
             )}
