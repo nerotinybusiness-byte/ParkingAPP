@@ -1,6 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { C, Spot } from '@/lib/data';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface PragueMapProps {
   spots: Spot[];
@@ -9,114 +11,118 @@ interface PragueMapProps {
   onSelect: (spot: Spot) => void;
 }
 
+const PRAGUE_CENTER: [number, number] = [50.083, 14.445];
+
 export default function PragueMap({ spots, mult, active, onSelect }: PragueMapProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<Map<number, L.CircleMarker>>(new Map());
+  const popupRef = useRef<L.Popup | null>(null);
+
+  // Initialize map once
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+
+    const map = L.map(containerRef.current, {
+      center: PRAGUE_CENTER,
+      zoom: 13,
+      zoomControl: false,
+      attributionControl: false,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(map);
+
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+    L.control.attribution({ position: 'bottomleft', prefix: false })
+      .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>')
+      .addTo(map);
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
+  // Update markers when spots/mult/active change
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    // Clear old markers
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current.clear();
+    if (popupRef.current) {
+      popupRef.current.remove();
+      popupRef.current = null;
+    }
+
+    spots.forEach((spot) => {
+      const isActive = active?.id === spot.id;
+      const fillColor = spot.available ? C.green : C.red;
+      const price = Math.round(spot.basePrice * mult);
+
+      const marker = L.circleMarker([spot.lat, spot.lng], {
+        radius: isActive ? 10 : 7,
+        fillColor,
+        color: '#ffffff',
+        weight: 2,
+        fillOpacity: 1,
+      }).addTo(map);
+
+      marker.on('click', () => onSelect(spot));
+      markersRef.current.set(spot.id, marker);
+
+      if (isActive) {
+        const popup = L.popup({
+          closeButton: false,
+          className: 'parkshare-popup',
+          offset: [0, -8],
+        })
+          .setLatLng([spot.lat, spot.lng])
+          .setContent(`<strong>${price} €</strong>`)
+          .openOn(map);
+        popupRef.current = popup;
+      }
+    });
+  }, [spots, mult, active, onSelect]);
+
   return (
-    <svg
-      viewBox="0 0 360 200"
-      style={{ width: '100%', height: 'auto', borderRadius: 8, background: C.bg }}
-    >
-      {/* Street grid — horizontal */}
-      {[55, 95, 135, 175].map((y) => (
-        <line key={`h${y}`} x1={0} y1={y} x2={360} y2={y} stroke="#e2e0db" strokeWidth={10} />
-      ))}
-      {/* Street grid — vertical */}
-      {[70, 130, 190, 250, 310].map((x) => (
-        <line key={`v${x}`} x1={x} y1={0} x2={x} y2={200} stroke="#e2e0db" strokeWidth={10} />
-      ))}
-
-      {/* Diagonal streets */}
-      <line x1={40} y1={30} x2={320} y2={170} stroke="#e2e0db" strokeWidth={7} />
-      <line x1={320} y1={30} x2={40} y2={170} stroke="#e2e0db" strokeWidth={7} />
-
-      {/* Vltava river — outer */}
-      <path
-        d="M 80,0 C 100,50 120,80 110,120 C 100,160 130,180 140,200"
-        fill="none"
-        stroke="#b8d8f0"
-        strokeWidth={18}
-        strokeLinecap="round"
+    <>
+      <div
+        ref={containerRef}
+        style={{ width: '100%', height: 320, borderRadius: 8, overflow: 'hidden' }}
       />
-      {/* Vltava river — inner */}
-      <path
-        d="M 80,0 C 100,50 120,80 110,120 C 100,160 130,180 140,200"
-        fill="none"
-        stroke="#cde4f2"
-        strokeWidth={10}
-        strokeLinecap="round"
-      />
-
-      {/* Spot markers */}
-      {spots.map((spot) => {
-        const isActive = active?.id === spot.id;
-        const fillColor = spot.available ? C.green : C.red;
-        const price = Math.round(spot.basePrice * mult);
-
-        return (
-          <g
-            key={spot.id}
-            onClick={() => onSelect(spot)}
-            style={{ cursor: 'pointer' }}
-          >
-            {/* Ping animation for active */}
-            {isActive && (
-              <circle
-                cx={spot.x}
-                cy={spot.y}
-                r={8}
-                fill={fillColor}
-                opacity={0.6}
-                style={{ animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite' }}
-              />
-            )}
-
-            {/* Main circle */}
-            <circle
-              cx={spot.x}
-              cy={spot.y}
-              r={isActive ? 8 : 6}
-              fill={fillColor}
-              stroke={C.surface}
-              strokeWidth={2}
-            />
-
-            {/* Price label for active */}
-            {isActive && (
-              <>
-                <rect
-                  x={spot.x + 12}
-                  y={spot.y - 12}
-                  width={52}
-                  height={22}
-                  rx={5}
-                  fill={C.text}
-                  opacity={0.9}
-                />
-                <text
-                  x={spot.x + 38}
-                  y={spot.y + 2}
-                  textAnchor="middle"
-                  fontSize={11}
-                  fontWeight={700}
-                  fill={C.surface}
-                  fontFamily="Figtree, sans-serif"
-                >
-                  {price} €
-                </text>
-              </>
-            )}
-          </g>
-        );
-      })}
-
-      {/* Legend */}
-      <circle cx={16} cy={180} r={5} fill={C.green} />
-      <text x={26} y={184} fontSize={9} fill={C.textMid} fontFamily="Figtree, sans-serif">
-        Available
-      </text>
-      <circle cx={16} cy={193} r={5} fill={C.red} />
-      <text x={26} y={197} fontSize={9} fill={C.textMid} fontFamily="Figtree, sans-serif">
-        Occupied
-      </text>
-    </svg>
+      <div style={{ display: 'flex', gap: 16, marginTop: 8, fontSize: 11, color: C.textMid }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: C.green, display: 'inline-block' }} />
+          Available
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: C.red, display: 'inline-block' }} />
+          Occupied
+        </span>
+      </div>
+      <style>{`
+        .parkshare-popup .leaflet-popup-content-wrapper {
+          background: ${C.text};
+          color: ${C.surface};
+          border-radius: 6px;
+          padding: 2px 6px;
+          font-size: 13px;
+          font-family: Figtree, sans-serif;
+          box-shadow: 0 2px 8px rgba(0,0,0,.25);
+        }
+        .parkshare-popup .leaflet-popup-content {
+          margin: 4px 6px;
+        }
+        .parkshare-popup .leaflet-popup-tip {
+          background: ${C.text};
+        }
+      `}</style>
+    </>
   );
 }

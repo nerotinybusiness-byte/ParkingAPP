@@ -6,9 +6,9 @@ export const C = {
   text:        "#111110",
   textMid:     "#6b6860",
   textSoft:    "#a3a198",
-  accent:      "#e8560a",
-  accentLight: "#fef3ed",
-  accentMid:   "#f7c4a8",
+  accent:      "#1e3a5f",
+  accentLight: "#e8edf3",
+  accentMid:   "#a3b8d0",
   green:       "#1a7a4a",
   greenLight:  "#eaf4ef",
   red:         "#c0392b",
@@ -24,17 +24,17 @@ export interface Spot {
   type: string;
   available: boolean;
   owner: string;
-  x: number;
-  y: number;
+  lat: number;
+  lng: number;
 }
 
 export const SPOTS: Spot[] = [
-  { id: 1, name: "Holešovice — Private Garage",  basePrice: 2, type: "Garage",     available: true,  owner: "Jan N.",           x: 138, y: 72  },
-  { id: 2, name: "Nusle — Courtyard Spot",       basePrice: 3, type: "Yard",       available: true,  owner: "Marie K.",         x: 178, y: 152 },
-  { id: 3, name: "O2 Arena — Commercial",        basePrice: 2, type: "Commercial", available: true,  owner: "ArenaPark s.r.o.", x: 270, y: 68  },
-  { id: 4, name: "Vinohrady — Hotel Garage",     basePrice: 4, type: "Hotel",      available: false, owner: "Hotel Omega",      x: 218, y: 118 },
-  { id: 5, name: "Žižkov — Corporate Lot",       basePrice: 2, type: "Corporate",  available: true,  owner: "Techpark CZ",      x: 248, y: 98  },
-  { id: 6, name: "Smíchov — Residential",        basePrice: 3, type: "Garage",     available: true,  owner: "HOA Smíchov 12",   x: 112, y: 138 },
+  { id: 1, name: "Holešovice — Private Garage",  basePrice: 2, type: "Garage",     available: true,  owner: "Jan N.",           lat: 50.1050, lng: 14.4378 },
+  { id: 2, name: "Nusle — Courtyard Spot",       basePrice: 3, type: "Yard",       available: true,  owner: "Marie K.",         lat: 50.0640, lng: 14.4340 },
+  { id: 3, name: "O2 Arena — Commercial",        basePrice: 2, type: "Commercial", available: true,  owner: "ArenaPark s.r.o.", lat: 50.1047, lng: 14.4900 },
+  { id: 4, name: "Vinohrady — Hotel Garage",     basePrice: 4, type: "Hotel",      available: false, owner: "Hotel Omega",      lat: 50.0750, lng: 14.4500 },
+  { id: 5, name: "Žižkov — Corporate Lot",       basePrice: 2, type: "Corporate",  available: true,  owner: "Techpark CZ",      lat: 50.0870, lng: 14.4600 },
+  { id: 6, name: "Smíchov — Residential",        basePrice: 3, type: "Garage",     available: true,  owner: "HOA Smíchov 12",   lat: 50.0700, lng: 14.4050 },
 ];
 
 export const EVENTS = [

@@ -1,11 +1,13 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { C, SPOTS, EVENTS, Spot } from '@/lib/data';
 import Card from '@/components/ui/Card';
 import Tag from '@/components/ui/Tag';
 import Pill from '@/components/ui/Pill';
 import Bar from '@/components/ui/Bar';
-import PragueMap from '@/components/PragueMap';
+
+const PragueMap = dynamic(() => import('@/components/PragueMap'), { ssr: false });
 
 type GateState = 'idle' | 'opening' | 'open';
 
