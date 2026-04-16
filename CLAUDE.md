@@ -1,119 +1,42 @@
-# CLAUDE.md — ParkShare Czech Republic
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
-ParkShare is a smart parking marketplace for Prague built as a single-page Next.js 14 application. It demonstrates three role-based views (Driver, Owner/Host, Admin) with interactive SVG maps, dynamic pricing, and real-time dashboard metrics. All data is mock/client-side — there is no backend or database.
-
-## Tech Stack
-
-- **Framework:** Next.js 14.2.29 (App Router)
-- **Language:** TypeScript 5.4.5
-- **UI:** React 18.3.1 with inline styles (no CSS framework)
-- **Font:** Figtree (Google Fonts, weights 400–800)
-- **Locale:** Czech (cs-CZ), currency CZK
+ParkShare is a smart parking marketplace demo for Prague — a single-page Next.js 14 app with three role-based views (Driver, Owner/Host, Admin). It is a pure frontend demo with no backend, database, or API calls. All data is mock data defined in `lib/data.ts`.
 
 ## Commands
 
 ```bash
-npm run dev      # Start dev server at http://localhost:3000
+npm run dev      # Dev server at http://localhost:3000
 npm run build    # Production build
 npm run start    # Serve production build
-npm run lint     # Run Next.js lint (ESLint)
+npm run lint     # ESLint via Next.js
 ```
 
-There is no test suite configured (no Jest, Vitest, Cypress, or Playwright).
+No test framework is configured.
 
-## Project Structure
+## Architecture
 
-```
-app/
-  layout.tsx         Root layout (metadata, Figtree font, body background)
-  page.tsx           Home page — role switcher (driver/owner/admin), renders views
-  globals.css        Keyframes (fadeIn, spin, ping), CSS resets, range input styles
+**Next.js 14 App Router** with a single route (`/`). All components use `'use client'` — there is no server-side data fetching.
 
-components/
-  DriverView.tsx     Driver interface: dynamic pricing, map, spot details, gate simulation
-  OwnerView.tsx      Owner interface: AI pricing advisor, 3-step wizard, audit log
-  AdminView.tsx      Admin dashboard: 6 KPIs, SDR gauge, occupancy, unit economics
-  PragueMap.tsx      Interactive SVG map of Prague with spot markers
-  ui/
-    Bar.tsx          Horizontal progress bar with optional label/value
-    Card.tsx         Container card with optional title, border, fadeIn animation
-    Pill.tsx         Toggle button (used for event/role selectors)
-    StatRow.tsx      Key-value row for statistics/financials
-    Tag.tsx          Colored badge/label
+**Role switching** happens via local state in `app/page.tsx`, which conditionally renders one of three view components: `DriverView`, `OwnerView`, or `AdminView`. There is no client-side routing between pages.
 
-lib/
-  data.ts            Design tokens (colors as `C`), TypeScript interfaces, mock data
-                     (SPOTS, EVENTS, AUDIT, KPI arrays)
-```
+**State management** is local only (`useState`/`useRef` per component). No Redux, Context, or external state library.
 
-## Architecture & Patterns
+**Styling** uses inline `style` props exclusively — no CSS modules, Tailwind, or styled-components. All color values come from the `C` constant exported by `lib/data.ts`. Responsive layouts use `<style>` tags with media queries embedded in components (breakpoint: 768px).
 
-### Rendering
-All interactive components use `'use client'` directive. The app is entirely client-rendered with no server components doing data fetching or SSR-specific logic.
+**Data layer:** `lib/data.ts` exports all mock data (`SPOTS`, `EVENTS`, `AUDIT`, `KPI`), TypeScript interfaces (`Spot`), type aliases (`Role`, `GateState`), and the color palette (`C`). Prices are computed client-side as `basePrice × demand multiplier`.
 
-### State Management
-Local `useState` / `useRef` only — no Redux, Zustand, or Context API. State is co-located within each view component:
-- `page.tsx` — `role` state switches between views
-- `DriverView` — `eventIdx`, `active` spot, `gate` state
-- `OwnerView` — `wizard` step, `wizType`, `price`, `tab`
-- `AdminView` — `sdr` / `occ` refs updated via `setInterval`
+**Reusable UI primitives** live in `components/ui/` (Card, Bar, Pill, Tag, StatRow). `PragueMap.tsx` is an interactive SVG map used by DriverView.
 
-### Routing
-Single-page app at `/`. No multi-page routing; views switch via role state in `page.tsx`.
+## Conventions
 
-### Styling
-Inline `style` props everywhere — no CSS modules, Tailwind, or styled-components. All colors come from the `C` constant in `lib/data.ts`. Responsive breakpoints (768px) are handled via `<style>` tags embedded in components with media queries.
-
-### Data
-All data lives in `lib/data.ts` as exported constants. No API calls, no fetch, no data layer. Prices are computed client-side as `basePrice * demand multiplier`.
-
-## Key Conventions
-
-### Naming
-- **Components:** PascalCase (`DriverView`, `StatRow`)
-- **Functions/variables:** camelCase (`handleGate`, `getAiText`)
-- **Constants/data arrays:** UPPERCASE (`SPOTS`, `EVENTS`, `AUDIT`, `KPI`)
-- **Props interfaces:** `{ComponentName}Props` suffix (`CardProps`, `PragueMapProps`)
-
-### Type Patterns
-- `type Role = 'driver' | 'owner' | 'admin'`
-- `type GateState = 'idle' | 'opening' | 'open'`
-- Interfaces for data models (`Spot`) and component props
-- Path alias `@/` maps to project root (configured in `tsconfig.json`)
-
-### Component Patterns
-- Default exports for all components
-- Props destructured in function signature
-- `useCallback` for event handlers passed as props or used in effects
-- Animations use CSS keyframes defined in `globals.css`
-
-### Number Formatting
-- Czech locale: `toLocaleString('cs-CZ')`
-- Currency always in CZK (Czech Koruna)
-- Platform fee constant: 15%
-
-## Design Tokens
-
-Colors are centralized in `lib/data.ts` as the `C` object:
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `C.bg` | `#f9f9f8` | Page background |
-| `C.surface` | `#ffffff` | Card backgrounds |
-| `C.text` | `#111110` | Primary text |
-| `C.textMid` | `#6b6860` | Secondary text |
-| `C.textSoft` | `#a3a198` | Muted/helper text |
-| `C.accent` | `#e8560a` | Primary orange accent |
-| `C.border` | `#e8e7e4` | Default borders |
-| `C.green` | `#1a7a4a` | Available / positive |
-| `C.red` | `#c0392b` | Occupied / negative |
-
-## Common Pitfalls
-
-- **No backend:** Don't try to add API routes or database connections without discussing architecture first. The app is a pure frontend demo.
-- **Inline styles:** Adding CSS modules or Tailwind would require refactoring every component. Follow the existing inline style pattern for consistency.
-- **Single page:** Adding new routes via the App Router is fine but the current navigation is state-based, not route-based.
-- **No tests:** There is no test infrastructure. Adding tests requires setting up Jest/Vitest and React Testing Library from scratch.
-- **Strict mode:** TypeScript strict mode is enabled in `tsconfig.json`. All code must pass strict checks.
+- **Components:** PascalCase, default exports, props destructured in signature
+- **Props interfaces:** `{ComponentName}Props` (e.g., `CardProps`)
+- **Data constants:** UPPERCASE (e.g., `SPOTS`, `EVENTS`)
+- **Path alias:** `@/` maps to project root
+- **Locale:** Czech (`cs-CZ`), currency CZK, use `toLocaleString('cs-CZ')` for number formatting
+- **TypeScript:** Strict mode enabled
+- **Animations:** Defined as CSS `@keyframes` in `app/globals.css` (`fadeIn`, `spin`, `ping`)
