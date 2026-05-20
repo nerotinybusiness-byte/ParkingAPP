@@ -49,39 +49,6 @@ function StatusBar({ light = false }: { light?: boolean }) {
   );
 }
 
-function PugFace() {
-  return (
-    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-      {/* Head */}
-      <ellipse cx="60" cy="62" rx="42" ry="38" fill="#d4a574" />
-      {/* Ears */}
-      <ellipse cx="24" cy="38" rx="16" ry="20" fill="#b8895a" transform="rotate(-15 24 38)" />
-      <ellipse cx="96" cy="38" rx="16" ry="20" fill="#b8895a" transform="rotate(15 96 38)" />
-      <ellipse cx="24" cy="38" rx="10" ry="14" fill="#c49a68" transform="rotate(-15 24 38)" />
-      <ellipse cx="96" cy="38" rx="10" ry="14" fill="#c49a68" transform="rotate(15 96 38)" />
-      {/* Face mask */}
-      <ellipse cx="60" cy="72" rx="28" ry="22" fill="#e8c9a0" />
-      {/* Eyes */}
-      <circle cx="42" cy="55" r="10" fill="#1a1a1a" />
-      <circle cx="78" cy="55" r="10" fill="#1a1a1a" />
-      <circle cx="45" cy="52" r="3" fill="#fff" />
-      <circle cx="81" cy="52" r="3" fill="#fff" />
-      {/* Nose */}
-      <ellipse cx="60" cy="68" rx="8" ry="5" fill="#2a2a2a" />
-      <circle cx="56" cy="67" r="1.5" fill="#444" />
-      <circle cx="64" cy="67" r="1.5" fill="#444" />
-      {/* Mouth */}
-      <path d="M52 74 Q60 82 68 74" stroke="#6b5a48" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <line x1="60" y1="73" x2="60" y2="77" stroke="#6b5a48" strokeWidth="1.5" strokeLinecap="round" />
-      {/* Wrinkles */}
-      <path d="M38 45 Q42 42 46 45" stroke="#b8895a" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <path d="M74 45 Q78 42 82 45" stroke="#b8895a" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      {/* Tongue */}
-      <ellipse cx="60" cy="82" rx="5" ry="4" fill="#e88" />
-    </svg>
-  );
-}
-
 function LockScreen({ onUnlock }: { onUnlock: () => void }) {
   return (
     <div
@@ -93,108 +60,163 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
         borderRadius: 46,
         overflow: 'hidden',
         cursor: 'pointer',
-        background: 'linear-gradient(160deg, #0f1923 0%, #1a2a3d 30%, #243b55 60%, #1a2a3d 100%)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        animation: 'fadeIn .5s ease',
       }}
     >
-      <StatusBar light />
-
-      {/* Lock icon */}
-      <div style={{ marginTop: 8, marginBottom: 6 }}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round">
-          <rect x="3" y="11" width="18" height="11" rx="2" />
-          <path d="M7 11V7a5 5 0 0110 0v4" />
-        </svg>
-      </div>
-
-      {/* Time */}
-      <div
-        style={{
-          fontSize: 72,
-          fontWeight: 200,
-          color: '#fff',
-          letterSpacing: '-2px',
-          lineHeight: 1,
-          marginBottom: 4,
-        }}
-      >
-        9:41
-      </div>
-
-      {/* Date */}
-      <div style={{ fontSize: 16, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: 40 }}>
-        Tuesday, May 20
-      </div>
-
-      {/* Pug */}
-      <div style={{ animation: 'float 3s ease-in-out infinite', marginBottom: 16 }}>
-        <PugFace />
-      </div>
-
-      {/* ParkShare logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-        <div
-          style={{
-            width: 28,
-            height: 28,
-            borderRadius: 8,
-            background: 'rgba(255,255,255,0.15)',
-            backdropFilter: 'blur(8px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 14,
-          }}
-        >
-          🅿️
-        </div>
-        <span style={{ fontSize: 16, fontWeight: 700, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.02em' }}>
-          ParkShare
-        </span>
-      </div>
-
-      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
-        Smart parking for Prague
-      </div>
-
-      {/* Swipe indicator */}
+      {/* Wallpaper photo */}
       <div
         style={{
           position: 'absolute',
-          bottom: 60,
-          left: '50%',
-          transform: 'translateX(-50%)',
+          inset: 0,
+          backgroundImage: 'url(/lockscreen.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 20%',
+          backgroundColor: '#1a3050',
+        }}
+      />
+
+      {/* Top gradient for status bar legibility */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 140,
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 100%)',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Bottom gradient */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 200,
+          background: 'linear-gradient(0deg, rgba(0,0,0,0.5) 0%, transparent 100%)',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Content layer */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 8,
-          animation: 'pulse 2s ease infinite',
         }}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round">
-          <path d="M18 15l-6-6-6 6" />
-        </svg>
-        <span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.45)' }}>
-          Tap to unlock
-        </span>
-      </div>
+        <StatusBar light />
 
-      {/* Home indicator */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 8,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 134,
-          height: 5,
-          borderRadius: 3,
-          background: 'rgba(255,255,255,0.6)',
-        }}
-      />
+        {/* Lock icon */}
+        <div style={{ marginTop: 4, marginBottom: 4 }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5" strokeLinecap="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0110 0v4" />
+          </svg>
+        </div>
+
+        {/* Time — iOS style: ultra thin, massive */}
+        <div
+          style={{
+            fontSize: 82,
+            fontWeight: 200,
+            color: '#fff',
+            letterSpacing: '-1px',
+            lineHeight: 1,
+            textShadow: '0 1px 8px rgba(0,0,0,0.3)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Figtree, sans-serif',
+          }}
+        >
+          9:41
+        </div>
+
+        {/* Date — iOS style */}
+        <div
+          style={{
+            fontSize: 18,
+            fontWeight: 500,
+            color: 'rgba(255,255,255,0.95)',
+            textShadow: '0 1px 4px rgba(0,0,0,0.3)',
+            marginTop: 2,
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Figtree, sans-serif',
+          }}
+        >
+          Tuesday, May 20
+        </div>
+
+        {/* Spacer */}
+        <div style={{ flex: 1 }} />
+
+        {/* Bottom actions — flashlight & camera */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            padding: '0 46px',
+            marginBottom: 16,
+          }}
+        >
+          {/* Flashlight */}
+          <div
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: '50%',
+              background: 'rgba(40,40,40,0.55)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18h6" />
+              <path d="M10 22h4" />
+              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14" />
+            </svg>
+          </div>
+
+          {/* Camera */}
+          <div
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: '50%',
+              background: 'rgba(40,40,40,0.55)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Home indicator */}
+        <div
+          style={{
+            width: 134,
+            height: 5,
+            borderRadius: 3,
+            background: 'rgba(255,255,255,0.7)',
+            marginBottom: 8,
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -233,7 +255,7 @@ export default function PhoneFrame({ children, tabBar, eyebrow, title }: PhoneFr
               flexDirection: 'column',
             }}
           >
-            {/* Lock screen easter egg */}
+            {/* Lock screen */}
             {locked && <LockScreen onUnlock={() => setLocked(false)} />}
 
             {/* Dynamic Island */}
