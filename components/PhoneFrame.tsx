@@ -24,25 +24,28 @@ function StatusBar({ light = false, time }: { light?: boolean; time?: string }) 
         zIndex: 10,
       }}
     >
-      <span style={{ fontSize: 15, fontWeight: 700, color, letterSpacing: '0.02em' }}>
+      <span style={{ fontSize: 16, fontWeight: 600, color, letterSpacing: '-0.01em', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", Figtree, sans-serif' }}>
         {time || '9:41'}
       </span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <svg width="18" height="12" viewBox="0 0 18 12" fill={color}>
-          <rect x="0" y="8" width="3" height="4" rx="1" />
-          <rect x="5" y="5" width="3" height="7" rx="1" />
-          <rect x="10" y="2.5" width="3" height="9.5" rx="1" />
-          <rect x="15" y="0" width="3" height="12" rx="1" />
-        </svg>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        {/* Cellular — 4 bars, iOS 17 style */}
         <svg width="17" height="12" viewBox="0 0 17 12" fill={color}>
-          <path d="M8.5 2.2c2.6 0 5 1 6.8 2.6.3.3.3.7 0 1l-.7.7c-.3.3-.6.3-.9 0A8 8 0 008.5 4.4 8 8 0 002.3 6.5c-.3.3-.6.3-.9 0l-.7-.7c-.3-.3-.3-.7 0-1A10 10 0 018.5 2.2z" />
-          <path d="M8.5 6.1c1.4 0 2.7.5 3.7 1.4.3.3.3.7 0 1l-.8.8c-.2.2-.5.2-.8 0a3.3 3.3 0 00-4.2 0c-.3.2-.6.2-.8 0l-.8-.8c-.3-.3-.3-.7 0-1A5.5 5.5 0 018.5 6z" />
-          <circle cx="8.5" cy="11" r="1.4" />
+          <rect x="0" y="9" width="3" height="3" rx="0.7" opacity="0.35" />
+          <rect x="4.5" y="6" width="3" height="6" rx="0.7" />
+          <rect x="9" y="3" width="3" height="9" rx="0.7" />
+          <rect x="13.5" y="0" width="3" height="12" rx="0.7" />
         </svg>
-        <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
-          <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke={color} strokeOpacity="0.4" />
+        {/* WiFi */}
+        <svg width="16" height="12" viewBox="0 0 16 12" fill={color}>
+          <path d="M8 3.4c2.1 0 4 .8 5.5 2.1a.6.6 0 010 .85l-.55.55a.6.6 0 01-.8 0A6.4 6.4 0 008 5.2a6.4 6.4 0 00-4.15 1.5.6.6 0 01-.8 0L2.5 6.15a.6.6 0 010-.85A8.6 8.6 0 018 3.4z" />
+          <path d="M8 6.8c1.15 0 2.2.4 3 1.1a.6.6 0 010 .85l-.65.65a.5.5 0 01-.7 0A2.8 2.8 0 008 8.6c-.7 0-1.3.25-1.65.8a.5.5 0 01-.7 0l-.65-.65a.6.6 0 010-.85A4.5 4.5 0 018 6.8z" />
+          <circle cx="8" cy="11" r="1.2" />
+        </svg>
+        {/* Battery */}
+        <svg width="27" height="13" viewBox="0 0 27 13" fill="none" style={{ marginLeft: 1 }}>
+          <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke={color} strokeOpacity="0.35" strokeWidth="1" />
           <rect x="2" y="2" width="17" height="9" rx="2" fill={light ? '#fff' : C.green} />
-          <rect x="24" y="4" width="2" height="5" rx="1" fill={color} fillOpacity="0.4" />
+          <path d="M25 4.5a1.3 1.3 0 010 4" stroke={color} strokeOpacity="0.35" strokeWidth="1.2" strokeLinecap="round" />
         </svg>
       </div>
     </div>
