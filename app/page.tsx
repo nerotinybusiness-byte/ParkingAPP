@@ -14,9 +14,9 @@ const TITLES: Record<Role, { eyebrow: string; title: string }> = {
 };
 
 const FEATURES = [
-  { icon: '📍', title: 'Dynamická cena', text: 'Ceny reagují na poptávku v reálném čase — hokej, ranní špička, vánoční trhy.' },
-  { icon: '🅿️', title: 'Sdílej své stání', text: 'Pronajmi garáž nebo dvůr a vydělávej, když parkování nevyužíváš.' },
-  { icon: '📊', title: 'Chytrý dashboard', text: 'Živé metriky obsazenosti, supply-demand a unit ekonomiky.' },
+  { icon: '📍', title: 'Dynamic pricing', text: 'Prices react to demand in real time — hockey games, morning rush, Christmas markets.' },
+  { icon: '🅿️', title: 'Share your spot', text: 'Rent out your garage or yard and earn money when you\'re not using it.' },
+  { icon: '📊', title: 'Smart dashboard', text: 'Live occupancy metrics, supply-demand balance and unit economics at a glance.' },
 ];
 
 export default function Home() {
@@ -62,7 +62,7 @@ export default function Home() {
             }}
           >
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: C.accent, animation: 'ping 1.6s ease-out infinite' }} />
-            LIVE DEMO — ovládej telefon vpravo
+            LIVE DEMO — try the phone on the right
           </div>
 
           <h1
@@ -75,15 +75,15 @@ export default function Home() {
               marginBottom: 20,
             }}
           >
-            Chytré sdílené
+            Smart shared
             <br />
-            parkování pro
-            <span style={{ color: C.accent }}> Prahu</span>
+            parking for
+            <span style={{ color: C.accent }}> Prague</span>
           </h1>
 
           <p style={{ fontSize: 18, lineHeight: 1.6, color: C.textMid, maxWidth: 460, marginBottom: 36 }}>
-            ParkShare propojuje řidiče, kteří hledají stání, s majiteli volných míst.
-            Vyzkoušej si tři pohledy aplikace přímo v telefonu vedle.
+            ParkShare connects drivers looking for parking with owners of available spots.
+            Try all three app views in the interactive phone demo.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 480 }}>
