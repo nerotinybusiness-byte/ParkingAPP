@@ -235,7 +235,7 @@ export default function AdminView() {
 
       {/* Responsive */}
       <style>{`
-        @media (max-width: 768px) {
+        @container app (max-width: 768px) {
           div[style*="repeat(6, 1fr)"] {
             grid-template-columns: repeat(2, 1fr) !important;
           }

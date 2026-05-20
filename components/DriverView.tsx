@@ -248,7 +248,7 @@ export default function DriverView() {
 
       {/* Responsive: collapse to 1 col on small screens */}
       <style>{`
-        @media (max-width: 768px) {
+        @container app (max-width: 768px) {
           div[style*="grid-template-columns: 1fr 340px"] {
             grid-template-columns: 1fr !important;
           }

@@ -222,7 +222,7 @@ export default function OwnerView() {
 
         {/* Responsive */}
         <style>{`
-          @media (max-width: 768px) {
+          @container app (max-width: 768px) {
             div[style*="grid-template-columns: 1fr 1fr"] {
               grid-template-columns: 1fr !important;
             }
