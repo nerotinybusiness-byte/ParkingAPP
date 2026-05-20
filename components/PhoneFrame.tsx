@@ -18,31 +18,37 @@ function StatusBar({ light = false, time }: { light?: boolean; time?: string }) 
       style={{
         height: 44,
         flexShrink: 0,
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '1fr 126px 1fr',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '17px 18px 0',
+        padding: '16px 14px 0',
         position: 'relative',
         zIndex: 10,
       }}
     >
-      <span style={{ fontSize: 15, fontWeight: 600, color, letterSpacing: '-0.01em', fontFamily: sf }}>
+      {/* Left ear — time */}
+      <span style={{ fontSize: 15, fontWeight: 600, color, letterSpacing: '-0.01em', fontFamily: sf, paddingLeft: 4 }}>
         {time || '9:41'}
       </span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        {/* Cellular — simple 4 bars */}
+
+      {/* Center — Dynamic Island space */}
+      <div />
+
+      {/* Right ear — signal, wifi, battery spread across */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 5, paddingRight: 2 }}>
+        {/* Cellular */}
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1.5, height: 10 }}>
           {[3, 5, 7.5, 10].map((h, i) => (
             <div key={i} style={{ width: 3, height: h, borderRadius: 1, background: i === 0 ? dim : color }} />
           ))}
         </div>
-        {/* WiFi — simple 3 arcs */}
+        {/* WiFi */}
         <svg width="14" height="10" viewBox="0 0 14 10">
           <path d="M1 3.2C3.2 1.2 5.5 0 7 0s3.8 1.2 6 3.2" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
           <path d="M3.2 5.8C4.5 4.6 5.7 4 7 4s2.5.6 3.8 1.8" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
           <circle cx="7" cy="9" r="1.3" fill={color} />
         </svg>
-        {/* Battery — simple outline + fill + cap */}
+        {/* Battery */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{
             width: 22, height: 11, borderRadius: 3,
