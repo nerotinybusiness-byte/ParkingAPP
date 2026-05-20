@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { C } from '@/lib/data';
 
 interface PhoneFrameProps {
@@ -9,7 +9,7 @@ interface PhoneFrameProps {
   title?: string;
 }
 
-function StatusBar({ light = false }: { light?: boolean }) {
+function StatusBar({ light = false, time }: { light?: boolean; time?: string }) {
   const color = light ? '#fff' : C.text;
   return (
     <div
@@ -25,7 +25,7 @@ function StatusBar({ light = false }: { light?: boolean }) {
       }}
     >
       <span style={{ fontSize: 15, fontWeight: 700, color, letterSpacing: '0.02em' }}>
-        9:41
+        {time || '9:41'}
       </span>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
         <svg width="18" height="12" viewBox="0 0 18 12" fill={color}>
@@ -49,14 +49,35 @@ function StatusBar({ light = false }: { light?: boolean }) {
   );
 }
 
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+function useCurrentTime() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return now;
+}
+
+function formatTime(d: Date) {
+  return `${d.getHours()}:${d.getMinutes().toString().padStart(2, '0')}`;
+}
+
+function formatDate(d: Date) {
+  return `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+}
+
 function LockScreen({ onUnlock }: { onUnlock: () => void }) {
+  const now = useCurrentTime();
   return (
     <div
       onClick={onUnlock}
       style={{
         position: 'absolute',
         inset: 0,
-        zIndex: 50,
+        zIndex: 999,
         borderRadius: 46,
         overflow: 'hidden',
         cursor: 'pointer',
@@ -111,7 +132,7 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
           alignItems: 'center',
         }}
       >
-        <StatusBar light />
+        <StatusBar light time={formatTime(now)} />
 
         {/* Lock icon */}
         <div style={{ marginTop: 4, marginBottom: 4 }}>
@@ -133,7 +154,7 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Figtree, sans-serif',
           }}
         >
-          9:41
+          {formatTime(now)}
         </div>
 
         {/* Date — iOS style */}
@@ -147,7 +168,7 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Figtree, sans-serif',
           }}
         >
-          Tuesday, May 20
+          {formatDate(now)}
         </div>
 
         {/* Spacer */}
@@ -223,6 +244,7 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
 
 export default function PhoneFrame({ children, tabBar, eyebrow, title }: PhoneFrameProps) {
   const [locked, setLocked] = useState(true);
+  const now = useCurrentTime();
 
   return (
     <div style={{ position: 'relative', filter: 'drop-shadow(0 40px 70px rgba(20,18,16,0.35))' }}>
@@ -279,7 +301,7 @@ export default function PhoneFrame({ children, tabBar, eyebrow, title }: PhoneFr
               <div style={{ width: 9, height: 9, borderRadius: '50%', background: '#1c1c2e', boxShadow: 'inset 0 0 2px rgba(80,80,140,0.6)' }} />
             </div>
 
-            <StatusBar />
+            <StatusBar time={formatTime(now)} />
 
             {/* App nav header */}
             {(title || eyebrow) && (
@@ -334,6 +356,7 @@ export default function PhoneFrame({ children, tabBar, eyebrow, title }: PhoneFr
                 padding: 14,
                 containerType: 'inline-size',
                 containerName: 'app',
+                isolation: 'isolate',
               } as React.CSSProperties}
             >
               {children}
