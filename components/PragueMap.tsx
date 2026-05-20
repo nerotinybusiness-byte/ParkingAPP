@@ -77,6 +77,8 @@ export default function PragueMap({ spots, mult, active, onSelect }: PragueMapPr
       markersRef.current.set(spot.id, marker);
 
       if (isActive) {
+        map.flyTo([spot.lat, spot.lng], 15, { duration: 0.8 });
+
         const popup = L.popup({
           closeButton: false,
           className: 'parkshare-popup',
