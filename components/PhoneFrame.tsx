@@ -11,6 +11,7 @@ interface PhoneFrameProps {
 
 function StatusBar({ light = false, time }: { light?: boolean; time?: string }) {
   const color = light ? '#fff' : C.text;
+  const dim = light ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.2)';
   const sf = '-apple-system, BlinkMacSystemFont, "SF Pro Text", Figtree, sans-serif';
   return (
     <div
@@ -20,7 +21,7 @@ function StatusBar({ light = false, time }: { light?: boolean; time?: string }) 
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'space-between',
-        padding: '0 26px 8px',
+        padding: '0 28px 8px',
         position: 'relative',
         zIndex: 10,
       }}
@@ -28,26 +29,31 @@ function StatusBar({ light = false, time }: { light?: boolean; time?: string }) 
       <span style={{ fontSize: 15, fontWeight: 600, color, letterSpacing: '-0.01em', fontFamily: sf }}>
         {time || '9:41'}
       </span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        {/* Cellular */}
-        <svg width="15" height="11" viewBox="0 0 15 11" fill={color}>
-          <rect x="0" y="8" width="2.5" height="3" rx="0.6" opacity="0.3" />
-          <rect x="4" y="5.5" width="2.5" height="5.5" rx="0.6" />
-          <rect x="8" y="3" width="2.5" height="8" rx="0.6" />
-          <rect x="12" y="0" width="2.5" height="11" rx="0.6" />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        {/* Cellular — simple 4 bars */}
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1.5, height: 10 }}>
+          {[3, 5, 7.5, 10].map((h, i) => (
+            <div key={i} style={{ width: 3, height: h, borderRadius: 1, background: i === 0 ? dim : color }} />
+          ))}
+        </div>
+        {/* WiFi — simple 3 arcs */}
+        <svg width="14" height="10" viewBox="0 0 14 10">
+          <path d="M1 3.2C3.2 1.2 5.5 0 7 0s3.8 1.2 6 3.2" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M3.2 5.8C4.5 4.6 5.7 4 7 4s2.5.6 3.8 1.8" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="7" cy="9" r="1.3" fill={color} />
         </svg>
-        {/* WiFi */}
-        <svg width="15" height="11" viewBox="0 0 15 11" fill={color}>
-          <path d="M7.5 2.5c2 0 3.8.7 5.2 2a.5.5 0 010 .7l-.5.5a.5.5 0 01-.65 0A6 6 0 007.5 4.2a6 6 0 00-4.05 1.5.5.5 0 01-.65 0l-.5-.5a.5.5 0 010-.7A8 8 0 017.5 2.5z" />
-          <path d="M7.5 6c1.1 0 2.1.4 2.9 1a.5.5 0 010 .7l-.6.6a.45.45 0 01-.6 0A2.5 2.5 0 007.5 7.7c-.6 0-1.2.2-1.7.6a.45.45 0 01-.6 0l-.6-.6a.5.5 0 010-.7A4.2 4.2 0 017.5 6z" />
-          <circle cx="7.5" cy="10" r="1.1" />
-        </svg>
-        {/* Battery */}
-        <svg width="25" height="11" viewBox="0 0 25 11" fill="none">
-          <rect x="0.5" y="0.5" width="20" height="10" rx="3" stroke={color} strokeOpacity="0.3" strokeWidth="1" />
-          <rect x="1.5" y="1.5" width="16" height="8" rx="2" fill={light ? '#fff' : C.green} />
-          <path d="M22.5 3.5a1.5 1.5 0 010 4" stroke={color} strokeOpacity="0.3" strokeWidth="1.1" strokeLinecap="round" />
-        </svg>
+        {/* Battery — simple outline + fill + cap */}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{
+            width: 22, height: 11, borderRadius: 3,
+            border: `1.2px solid ${dim}`,
+            padding: 1.5,
+            display: 'flex',
+          }}>
+            <div style={{ flex: 1, borderRadius: 1.5, background: light ? '#fff' : C.green, maxWidth: 16 }} />
+          </div>
+          <div style={{ width: 2, height: 4.5, borderRadius: '0 1.5px 1.5px 0', background: dim, marginLeft: 0.5 }} />
+        </div>
       </div>
     </div>
   );
