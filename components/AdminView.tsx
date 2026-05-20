@@ -45,43 +45,43 @@ export default function AdminView() {
   const occInSweet = occ >= 85 && occ <= 95;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* KPI strip */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {/* KPI strip — staggered entry */}
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(6, 1fr)',
-          gap: 12,
+          gap: 8,
         }}
       >
-        {KPI.map((k) => (
+        {KPI.map((k, i) => (
           <div
             key={k.label}
             style={{
               background: C.surface,
               border: `1px solid ${C.border}`,
               borderRadius: 10,
-              padding: '14px 16px',
-              animation: 'fadeIn .3s ease',
+              padding: '10px 8px',
+              animation: `spring .5s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.06}s backwards`,
             }}
           >
-            <div style={{ fontSize: 11, color: C.textSoft, marginBottom: 4 }}>{k.label}</div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: k.color }}>{k.value}</div>
+            <div style={{ fontSize: 9, color: C.textSoft, marginBottom: 3 }}>{k.label}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: k.color }}>{k.value}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         {/* SDR card */}
-        <Card title="Supply-Demand Ratio (SDR)">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 16 }}>
+        <Card title="SDR — Live" delay={0.1}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
             {/* Circular gauge */}
             <div
               style={{
-                width: 90,
-                height: 90,
+                width: 72,
+                height: 72,
                 borderRadius: '50%',
-                border: `6px solid ${C.border}`,
+                border: `5px solid ${C.border}`,
                 borderTopColor: sdrInRange ? C.green : C.yellow,
                 borderRightColor: sdrInRange ? C.green : C.yellow,
                 display: 'flex',
@@ -89,40 +89,42 @@ export default function AdminView() {
                 justifyContent: 'center',
                 flexShrink: 0,
                 transition: 'border-color .4s ease',
+                animation: sdrInRange ? undefined : 'glowPulse 2s ease infinite',
               }}
             >
               <div>
-                <div style={{ fontSize: 24, fontWeight: 800, color: C.text, textAlign: 'center' }}>
+                <div style={{ fontSize: 18, fontWeight: 800, color: C.text, textAlign: 'center', transition: 'color .3s' }}>
                   {sdr.toFixed(1)}
                 </div>
-                <div style={{ fontSize: 10, color: C.textSoft, textAlign: 'center' }}>SDR</div>
+                <div style={{ fontSize: 9, color: C.textSoft, textAlign: 'center' }}>SDR</div>
               </div>
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 13, color: C.textMid, marginBottom: 8 }}>
-                Real-time supply vs demand balance
-              </div>
-              {/* Status badge */}
               <div
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: 6,
-                  fontSize: 12,
+                  gap: 5,
+                  fontSize: 11,
                   fontWeight: 700,
                   color: sdrInRange ? C.green : C.yellow,
                   background: sdrInRange ? C.greenLight : C.yellowLight,
-                  padding: '4px 10px',
+                  padding: '3px 8px',
                   borderRadius: 6,
+                  animation: sdrInRange ? undefined : 'pulse 1.5s ease infinite',
+                  transition: 'background .3s, color .3s',
                 }}
               >
-                {sdrInRange ? '✓ Balanced market' : '⚠ Out of range'}
+                {sdrInRange ? '✓ Balanced' : '⚠ Out of range'}
+              </div>
+              <div style={{ fontSize: 11, color: C.textMid, marginTop: 6, lineHeight: 1.4 }}>
+                Supply vs demand balance
               </div>
             </div>
           </div>
 
           {/* Zone bar */}
-          <div style={{ position: 'relative', height: 20, marginBottom: 6 }}>
+          <div style={{ position: 'relative', height: 16, marginBottom: 4 }}>
             <div
               style={{
                 position: 'absolute',
@@ -132,43 +134,42 @@ export default function AdminView() {
                 border: `1px solid ${C.border}`,
               }}
             />
-            {/* Indicator */}
             <div
               style={{
                 position: 'absolute',
                 left: `${((sdr - 50) / 50) * 100}%`,
-                top: 2,
+                top: 1,
                 width: 4,
-                height: 16,
+                height: 14,
                 borderRadius: 2,
                 background: C.text,
-                transition: 'left .4s ease',
+                transition: 'left .5s cubic-bezier(0.34, 1.56, 0.64, 1)',
               }}
             />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.textSoft }}>
-            <span>Under-supply</span>
-            <span>Optimum (65–90)</span>
-            <span>Over-supply</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: C.textSoft }}>
+            <span>Under</span>
+            <span>Optimum</span>
+            <span>Over</span>
           </div>
         </Card>
 
         {/* Occupancy card */}
-        <Card title="Occupancy rate">
-          <div style={{ fontSize: 42, fontWeight: 800, color: C.text, marginBottom: 8 }}>
+        <Card title="Occupancy — Live" delay={0.16}>
+          <div style={{ fontSize: 36, fontWeight: 800, color: C.text, marginBottom: 6, transition: 'color .3s' }}>
             {occ.toFixed(1)}%
           </div>
-          <div style={{ position: 'relative', marginBottom: 8 }}>
-            <Bar value={occ} color={occInSweet ? C.green : C.yellow} height={10} />
-            {/* Sweet spot markers */}
+          <div style={{ position: 'relative', marginBottom: 6 }}>
+            <Bar value={occ} color={occInSweet ? C.green : C.yellow} height={8} />
             <div
               style={{
                 position: 'absolute',
                 left: '85%',
                 top: -2,
                 width: 2,
-                height: 14,
+                height: 12,
                 background: C.textSoft,
+                opacity: 0.6,
               }}
             />
             <div
@@ -177,42 +178,43 @@ export default function AdminView() {
                 left: '95%',
                 top: -2,
                 width: 2,
-                height: 14,
+                height: 12,
                 background: C.textSoft,
+                opacity: 0.6,
               }}
             />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.textSoft, marginBottom: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: C.textSoft, marginBottom: 10 }}>
             <span>0%</span>
-            <span>Sweet spot 85–95%</span>
+            <span>Sweet 85–95%</span>
             <span>100%</span>
           </div>
           <div
             style={{
-              fontSize: 13,
+              fontSize: 11,
               color: C.textMid,
+              lineHeight: 1.5,
               background: C.bg,
-              padding: 12,
+              padding: 10,
               borderRadius: 8,
               border: `1px solid ${C.border}`,
             }}
           >
-            The AI pricing engine continuously adjusts rates to keep city-wide occupancy
-            within the 85–95% sweet spot, maximizing revenue while minimizing cruising.
+            AI pricing engine keeps occupancy in the sweet spot, maximizing revenue.
           </div>
         </Card>
       </div>
 
-      {/* Unit economics card */}
-      <Card title="Unit economics — per booking">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
-          {UNIT_ROWS.map((row) => (
-            <div key={row.label}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
+      {/* Unit economics */}
+      <Card title="Unit economics" delay={0.22}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 12 }}>
+          {UNIT_ROWS.map((row, i) => (
+            <div key={row.label} style={{ animation: `fadeIn .3s ease ${0.3 + i * 0.06}s backwards` }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 3 }}>
                 <span style={{ color: C.textMid }}>{row.label}</span>
                 <span style={{ fontWeight: 700, color: row.color }}>{row.display}</span>
               </div>
-              <Bar value={row.value} max={row.max} color={row.color} height={6} />
+              <Bar value={row.value} max={row.max} color={row.color} height={5} />
             </div>
           ))}
         </div>
@@ -220,12 +222,12 @@ export default function AdminView() {
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 6,
-            fontSize: 12,
+            gap: 5,
+            fontSize: 11,
             fontWeight: 700,
             color: C.green,
             background: C.greenLight,
-            padding: '4px 10px',
+            padding: '3px 8px',
             borderRadius: 6,
           }}
         >
@@ -237,7 +239,7 @@ export default function AdminView() {
       <style>{`
         @container app (max-width: 768px) {
           div[style*="repeat(6, 1fr)"] {
-            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-columns: repeat(3, 1fr) !important;
           }
           div[style*="grid-template-columns: 1fr 1fr"] {
             grid-template-columns: 1fr !important;

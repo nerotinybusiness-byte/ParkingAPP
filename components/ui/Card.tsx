@@ -6,29 +6,33 @@ interface CardProps {
   title?: string;
   children: React.ReactNode;
   style?: React.CSSProperties;
+  delay?: number;
+  glass?: boolean;
 }
 
-export default function Card({ title, children, style }: CardProps) {
+export default function Card({ title, children, style, delay = 0, glass = false }: CardProps) {
   return (
     <div
       style={{
-        background: C.surface,
+        background: glass ? 'rgba(255,255,255,0.75)' : C.surface,
+        backdropFilter: glass ? 'blur(12px)' : undefined,
         border: `1px solid ${C.border}`,
-        borderRadius: 12,
-        padding: 20,
-        animation: 'fadeIn .3s ease',
+        borderRadius: 14,
+        padding: 18,
+        animation: `spring 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s backwards`,
+        transition: 'box-shadow .2s ease, transform .2s ease',
         ...style,
       }}
     >
       {title && (
         <h3
           style={{
-            fontSize: 13,
-            fontWeight: 600,
+            fontSize: 12,
+            fontWeight: 700,
             color: C.textMid,
             textTransform: 'uppercase',
-            letterSpacing: '0.04em',
-            marginBottom: 14,
+            letterSpacing: '0.06em',
+            marginBottom: 12,
           }}
         >
           {title}
