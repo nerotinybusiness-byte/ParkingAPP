@@ -16,12 +16,12 @@ function StatusBar({ light = false, time }: { light?: boolean; time?: string }) 
   return (
     <div
       style={{
-        height: 54,
+        height: 48,
         flexShrink: 0,
         display: 'flex',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 28px 8px',
+        padding: '14px 24px 0',
         position: 'relative',
         zIndex: 10,
       }}
